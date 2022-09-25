@@ -1,0 +1,35 @@
+.eventImage {
+  width: 100%;
+  height: 30vh;
+  object-fit: cover;
+}
+
+.event-container {
+  padding: 1% 10%;
+}
+
+.hostName {
+  display: flex;
+  gap: 10px
+}
+
+.dateCard {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 4%;
+
+  background-color: #fff;
+}
+
+.dateCard-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.dateCard-context {
+  display: flex;
+  gap: 10px;
+}
