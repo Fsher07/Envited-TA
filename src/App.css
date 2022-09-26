@@ -5,3 +5,9 @@
   font-family: Helvetica, sans-serif;
 }
 
+
+/* primary text color*/
+:root {
+  --color-title: #240D57;
+}
+
