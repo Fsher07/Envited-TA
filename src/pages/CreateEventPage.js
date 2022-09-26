@@ -1,14 +1,14 @@
 import React, { useContext, useState } from "react";
-import { useForm } from "react-hook-form";
+import dayjs from "dayjs";
+import { useForm, Controller } from "react-hook-form";
 import { TextField } from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { SiCmake } from "react-icons/si";
 import { Context } from "../Context";
 import WavesSplash from "../components/WavesSplash";
-
 import "./CreateEventPage.css";
-import { MobileDatePicker, TimePicker } from "@mui/x-date-pickers";
 import { Link } from "react-router-dom";
 
 function CreateEventPage() {
@@ -18,27 +18,16 @@ function CreateEventPage() {
 
   const [isDisabled, setIsDisabled] = useState(true);
 
-  /* value for datepicker */
-  const [startDate, setStartDate] = useState("2022-09-25T09:00:00");
-  const [endDate, setEndDate] = useState("2022-09-25T09:00:00");
-
-  /* to show current value on input field */
-  const handleStartDate = (newValue) => {
-    setStartDate(newValue);
-  };
-
-  const handleEndDate = (newValue) => {
-    setEndDate(newValue);
-  };
-
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors },
   } = useForm();
 
   const onSubmit = (e) => {
     setEntries(e);
+    console.log(e);
     setIsDisabled(false);
   };
 
@@ -50,7 +39,6 @@ function CreateEventPage() {
           id='filled-basic'
           label='Event Name'
           variant='filled'
-          size='small'
           color='secondary'
           {...register("eventName", { required: true })}
         />
@@ -58,47 +46,56 @@ function CreateEventPage() {
           id='filled-basic'
           label='Host Name'
           variant='filled'
-          size='small'
           color='secondary'
           {...register("hostName", { required: true })}
         />
         <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <MobileDatePicker
-            label='Start Date'
-            inputFormat='MM/DD/YYYY'
-            value={startDate}
-            onChange={handleStartDate}
-            renderInput={(params) => <TextField {...params} />}
-            {...register("startDate", { required: true })}
+          <Controller
+            name='startDate'
+            control={control}
+            defaultValue={dayjs(new Date()).format("YYYY/MM/DD hh:mm A")}
+            render={({ field: { onChange, value } }) => (
+              <DateTimePicker
+                label='Start Date'
+                inputFormat='YYYY/MM/DD hh:mm A'
+                value={value}
+                onChange={(values) => {
+                  const formattedDate =
+                    dayjs(values).format("YYYY/MM/DD hh:mm A");
+                  onChange(formattedDate);
+                }}
+                renderInput={(params) => (
+                  <TextField color='secondary' {...params} />
+                )}
+              />
+            )}
           />
-          <TimePicker
-            label='Start Time'
-            value={startDate}
-            onChange={handleStartDate}
-            renderInput={(params) => <TextField {...params} />}
-            {...register("startTime", { required: true })}
-          />
-          <MobileDatePicker
-            label='End Date'
-            inputFormat='MM/DD/YYYY'
-            value={endDate}
-            onChange={handleEndDate}
-            renderInput={(params) => <TextField {...params} />}
-            {...register("endDate", { required: true })}
-          />
-          <TimePicker
-            label='End Time'
-            value={endDate}
-            onChange={handleEndDate}
-            renderInput={(params) => <TextField {...params} />}
-            {...register("endTime", { required: true })}
+          <Controller
+            name='endDate'
+            control={control}
+            defaultValue={dayjs(new Date()).format("YYYY/MM/DD hh:mm A UTC Z")}
+            render={({ field: { onChange, value } }) => (
+              <DateTimePicker
+                label='End Date'
+                inputFormat='YYYY/MM/DD hh:mm A'
+                value={value}
+                onChange={(values) => {
+                  const formattedDate = dayjs(values).format(
+                    "YYYY/MM/DD hh:mm A UTC Z"
+                  );
+                  onChange(formattedDate.slice(0, -3));
+                }}
+                renderInput={(params) => (
+                  <TextField color='secondary' {...params} />
+                )}
+              />
+            )}
           />
         </LocalizationProvider>
         <TextField
           id='filled-basic'
           label='Location'
           variant='filled'
-          size='small'
           color='secondary'
           {...register("location", { required: true })}
         />
@@ -106,7 +103,6 @@ function CreateEventPage() {
           id='filled-basic'
           label='Event Image URL'
           variant='filled'
-          size='small'
           color='secondary'
           {...register("eventImage", { required: true })}
         />
