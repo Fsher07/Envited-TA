@@ -7,7 +7,7 @@ import "./LandingPage.css";
 function LandingPage() {
   return (
     <div className='landing-container'>
-      <header>
+      <header className='grid-1'>
         <h1>
           <div className='landing-topic'>Imagine if</div>
           <div id='snapchat-text'>Snapchat</div>
@@ -18,15 +18,17 @@ function LandingPage() {
           media.
         </p>
       </header>
-      <section className='landingSection'>
+      <section className='landingSection grid-2'>
         <img src={LandingImg} alt='Landing' />
-        <Link to='/create' className='landingButton-container'>
-          <button className='landingButton'>
-            <GiPartyPopper className='partyIcon' />
-            Create my event
-          </button>
-        </Link>
       </section>
+      <div className='landingButton-container grid-3'>
+        <button className='landingButton'>
+          <Link to='/create' className='button-text'>
+            <GiPartyPopper className='partyIcon' />
+            &nbsp;Create my event
+          </Link>
+        </button>
+      </div>
     </div>
   );
 }
